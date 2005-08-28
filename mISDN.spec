@@ -1,10 +1,13 @@
+#
+# Conditional build:
 %bcond_without	dist_kernel	# allow non-distribution kernel
 %bcond_without	smp		# don't build SMP module
 %bcond_with	verbose		# verbose build (V=1)
-
+#
 %define         mISDN_version           CVS-2005-07-06
 
 Summary:	mISDN - modular ISDN
+Summary(pl):	mISDN - modularny ISDN
 Name:		mISDN
 Version:	2005.07.06
 %define		_rel	0.1
@@ -19,7 +22,12 @@ BuildRequires:	rpmbuild(macros) >= 1.217
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-mISDN (modular ISDN) is the new ISDN stack of the linux kernel version 2.6.
+mISDN (modular ISDN) is the new ISDN stack of the Linux kernel version
+2.6.
+
+%description -l pl
+mISDN (modularny ISDN) to nowy stos ISDN dla j±dra Linuksa w wersji
+2.6.
 
 %package -n kernel-isdn-mISDN
 Summary:	Linux driver for mISDN
