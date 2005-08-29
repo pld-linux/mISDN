@@ -74,9 +74,9 @@ Ten pakiet zawiera modu³ j±dra Linuksa SMP.
 %prep
 %setup -q -n %{name}-%{mISDN_version}
 
-mv Makefile.module Makefile
-
 %build
+cd drivers/isdn/hardware/mISDN
+sed -e 's#$(.*)#m#g' Makefile.v2.6 > Makefile
 
 for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do
 	if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
@@ -86,6 +86,7 @@ for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}
 	install -d include/{linux,config}
 	ln -sf %{_kernelsrcdir}/config-$cfg .config
 	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h include/linux/autoconf.h
+	cp -a ../../../../include/linux/*.h include/linux
 	ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
 	touch include/config/MARKER
 
@@ -98,18 +99,27 @@ for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}
 		M=$PWD O=$PWD \
 		%{?with_verbose:V=1}
 
-#	mv mISDN{,-$cfg}.ko
+	for mod in *.ko; do
+		m=$(echo "$mod" | sed -e 's#.ko##g')
+		mv ${m}.ko ../${m}-${cfg}.ko
+	done
 done
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
+cd drivers/isdn/hardware
 install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/drivers/isdn/hardware/mISDN
-install mISDN-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko \
-	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/drivers/isdn/hardware/mISDN/
+
+for mod in *-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko; do
+	m=$(echo "$mod" | sed -e 's#-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko##g'
+	install "$mod" $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/drivers/isdn/hardware/mISDN/${m}.ko
+done
+
 %if %{with smp} && %{with dist_kernel}
-install mISDN-smp.ko \
-	$RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/drivers/isdn/hardware/mISDN/
+for mod in *-smp.ko; do
+	m=$(echo "$mod" | sed -e 's#-smp.ko##g')
+	install "$mod" $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/drivers/isdn/hardware/mISDN/${m}.ko
+done
 %endif
 
 %clean
