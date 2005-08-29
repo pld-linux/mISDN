@@ -110,8 +110,9 @@ rm -rf $RPM_BUILD_ROOT
 cd drivers/isdn/hardware
 install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/drivers/isdn/hardware/mISDN
 
-for mod in *-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko; do
-	m=$(echo "$mod" | sed -e 's#-%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}.ko##g'
+sep="%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}"
+for mod in *-${sep}.ko; do
+	m=$(echo "$mod" | sed -e "s#-${sep}.ko##g")
 	install "$mod" $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/drivers/isdn/hardware/mISDN/${m}.ko
 done
 
@@ -139,10 +140,12 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n kernel-isdn-mISDN
 %defattr(644,root,root,755)
+%dir /lib/modules/%{_kernel_ver}/drivers/isdn/hardware/mISDN
 /lib/modules/%{_kernel_ver}/drivers/isdn/hardware/mISDN/*.ko*
 
 %if %{with smp} && %{with dist_kernel}
 %files -n kernel-smp-isdn-mISDN
 %defattr(644,root,root,755)
+%dir /lib/modules/%{_kernel_ver}smp/drivers/isdn/hardware/mISDN
 /lib/modules/%{_kernel_ver}smp/drivers/isdn/hardware/mISDN/*.ko*
 %endif
