@@ -71,6 +71,13 @@ Sterownik dla Linuksa do mISDN.
 
 Ten pakiet zawiera modu³ j±dra Linuksa SMP.
 
+%package devel
+Summary:        Development header files for mISDN
+Group:          Development/Libraries
+
+%description devel
+Development header files for mISDN.
+
 %prep
 %setup -q -n %{name}-%{mISDN_version}
 
@@ -107,6 +114,10 @@ done
 
 %install
 rm -rf $RPM_BUILD_ROOT
+
+install -d $RPM_BUILD_ROOT%{_includedir}/linux
+install include/linux/*.h $RPM_BUILD_ROOT%{_includedir}/linux
+
 cd drivers/isdn/hardware
 install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/drivers/isdn/hardware/mISDN
 
@@ -149,3 +160,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir /lib/modules/%{_kernel_ver}smp/drivers/isdn/hardware/mISDN
 /lib/modules/%{_kernel_ver}smp/drivers/isdn/hardware/mISDN/*.ko*
 %endif
+
+%files devel
+%defattr(644,root,root,755)
+%{_includedir}/linux/*.h
