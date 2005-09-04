@@ -73,10 +73,14 @@ Ten pakiet zawiera modu³ j±dra Linuksa SMP.
 
 %package devel
 Summary:        Development header files for mISDN
+Summary(pl):	Pliki nag³ówkowe mISDN
 Group:          Development/Libraries
 
 %description devel
 Development header files for mISDN.
+
+%description devel -l pl
+Pliki nag³ówkowe mISDN.
 
 %prep
 %setup -q -n %{name}-%{mISDN_version}
