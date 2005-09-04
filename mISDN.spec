@@ -4,7 +4,7 @@
 %bcond_without	smp		# don't build SMP module
 %bcond_with	verbose		# verbose build (V=1)
 #
-%define         mISDN_version           CVS-2005-07-06
+%define		mISDN_version		CVS-2005-07-06
 
 Summary:	mISDN - modular ISDN
 Summary(pl):	mISDN - modularny ISDN
@@ -72,9 +72,9 @@ Sterownik dla Linuksa do mISDN.
 Ten pakiet zawiera modu³ j±dra Linuksa SMP.
 
 %package devel
-Summary:        Development header files for mISDN
+Summary:	Development header files for mISDN
 Summary(pl):	Pliki nag³ówkowe mISDN
-Group:          Development/Libraries
+Group:		Development/Libraries
 
 %description devel
 Development header files for mISDN.
