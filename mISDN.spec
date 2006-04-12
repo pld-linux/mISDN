@@ -6,18 +6,18 @@
 #
 %define		mISDN_version		CVS-2005-07-06
 
+%define		_rel	0.1
 Summary:	mISDN - modular ISDN
 Summary(pl):	mISDN - modularny ISDN
 Name:		mISDN
 Version:	2005.07.06
-%define		_rel	0.1
 Release:	%{_rel}
 License:	GPL
 Group:		Base/Kernel
-Source0: 	ftp://ftp.isdn4linux.de/pub/isdn4linux/CVS-Snapshots/%{name}-%{mISDN_version}.tar.bz2
+Source0:	ftp://ftp.isdn4linux.de/pub/isdn4linux/CVS-Snapshots/%{name}-%{mISDN_version}.tar.bz2
 # Source0-md5:	f8892d49e00e3fa26e65e22084edd472
 URL:		http://www.isdn4linux.de/mISDN/
-%{?with_dist_kernel:BuildRequires:	kernel-module-build >= 2.6.7}
+%{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
 BuildRequires:	rpmbuild(macros) >= 1.217
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -83,7 +83,7 @@ Development header files for mISDN.
 Pliki nag³ówkowe mISDN.
 
 %prep
-%setup -q -n %{name}-%{mISDN_version}
+%setup -q -n %{name}-%{%{name}_version}
 
 %build
 cd drivers/isdn/hardware/mISDN
