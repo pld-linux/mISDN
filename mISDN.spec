@@ -4,19 +4,19 @@
 %bcond_without	smp		# don't build SMP module
 %bcond_with	verbose		# verbose build (V=1)
 #
-%define		mISDN_version		CVS-2005-07-06
+%define		mISDN_version		1_0_4
 
 %define		_rel	0.1
 Summary:	mISDN - modular ISDN
 Summary(pl):	mISDN - modularny ISDN
 Name:		mISDN
-Version:	2005.07.06
+Version:	1.0.4
 Release:	%{_rel}
 License:	GPL
 Group:		Base/Kernel
-Source0:	ftp://ftp.isdn4linux.de/pub/isdn4linux/CVS-Snapshots/%{name}-%{mISDN_version}.tar.bz2
-# Source0-md5:	f8892d49e00e3fa26e65e22084edd472
-URL:		http://www.isdn4linux.de/mISDN/
+Source0:	http://www.misdn.org/downloads/releases/%{name}-%{mISDN_version}.tar.gz
+# Source0-md5:	0cb49bf91670b67a34802455cad2212d
+URL:		http://www.misdn.org/
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
 BuildRequires:	rpmbuild(macros) >= 1.217
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -83,39 +83,12 @@ Development header files for mISDN.
 Pliki nag³ówkowe mISDN.
 
 %prep
-%setup -q -n %{name}-%{%{name}_version}
+%setup -q -n %{name}-%{mISDN_version}
+
 
 %build
-cd drivers/isdn/hardware/mISDN
-sed -e 's#$(.*)#m#g' Makefile.v2.6 > Makefile
 
-for cfg in %{?with_dist_kernel:%{?with_smp:smp} up}%{!?with_dist_kernel:nondist}; do
-	if [ ! -r "%{_kernelsrcdir}/config-$cfg" ]; then
-		exit 1
-	fi
-	rm -rf include
-	install -d include/{linux,config}
-	ln -sf %{_kernelsrcdir}/config-$cfg .config
-	ln -sf %{_kernelsrcdir}/include/linux/autoconf-$cfg.h include/linux/autoconf.h
-	cp -a ../../../../include/linux/*.h include/linux
-	ln -sf %{_kernelsrcdir}/include/asm-%{_target_base_arch} include/asm
-	ln -sf %{_kernelsrcdir}/Module.symvers-$cfg Module.symvers
-	touch include/config/MARKER
-
-	%{__make} -C %{_kernelsrcdir} clean \
-		RCS_FIND_IGNORE="-name '*.ko' -o" \
-		M=$PWD O=$PWD \
-		%{?with_verbose:V=1}
-	%{__make} -C %{_kernelsrcdir} modules \
-		CC="%{__cc}" CPP="%{__cpp}" \
-		M=$PWD O=$PWD \
-		%{?with_verbose:V=1}
-
-	for mod in *.ko; do
-		m=$(echo "$mod" | sed -e 's#.ko##g')
-		mv ${m}.ko ../${m}-${cfg}.ko
-	done
-done
+%build_kernel_modules -m avmfritz -C drivers/isdn/hardware/mISDN/
 
 %install
 rm -rf $RPM_BUILD_ROOT
