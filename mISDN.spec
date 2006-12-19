@@ -87,8 +87,19 @@ Pliki nag³ówkowe mISDN.
 
 %build
 cp -r include/linux drivers/isdn/hardware/mISDN/
-sed -e 's#$(.*)#m#g' drivers/isdn/hardware/mISDN/Makefile.v2.6 > drivers/isdn/hardware/mISDN/Makefile
-%build_kernel_modules -m l3udss1,mISDN_capi,mISDN_core,mISDN_dtmf,mISDN_x25dte,mISDN_isac,mISDN_l1,mISDN_l2 -C drivers/isdn/hardware/mISDN/
+
+cat add.config > drivers/isdn/hardware/mISDN/Makefile
+echo "CONFIG_MISDN_NETJET=y" >> drivers/isdn/hardware/mISDN/Makefile
+echo "CONFIG_MISDN_HFCUSB=y" >> drivers/isdn/hardware/mISDN/Makefile
+echo "CONFIG_MISDN_HFCMINI=y" >> drivers/isdn/hardware/mISDN/Makefile
+echo "CONFIG_MISDN_HFCMULTI=y" >> drivers/isdn/hardware/mISDN/Makefile
+echo "CONFIG_MISDN_XHFC=y" >> drivers/isdn/hardware/mISDN/Makefile
+echo "CONFIG_MISDN_DSP=y" >> drivers/isdn/hardware/mISDN/Makefile
+echo "CONFIG_MISDN_LOOP=y" >> drivers/isdn/hardware/mISDN/Makefile
+echo "CONFIG_I4L_CAPI_LAYER=y" >> drivers/isdn/hardware/mISDN/Makefile
+
+sed -e 's#$(.*)#m#g' drivers/isdn/hardware/mISDN/Makefile.v2.6 >> drivers/isdn/hardware/mISDN/Makefile
+%build_kernel_modules -m l3udss1,mISDN_capi,mISDN_core,mISDN_dtmf,mISDN_x25dte,mISDN_isac,mISDN_l1,mISDN_l2,avmfritz,netjetpci,hfcpci,hfcsusb,hfcsmini,sedlfax,w6692pci,hfcmulti,xhfc,mISDN_dsp,mISDN_loop,I4LmISDN -C drivers/isdn/hardware/mISDN/
 
 %install
 rm -rf $RPM_BUILD_ROOT
