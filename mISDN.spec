@@ -12,6 +12,7 @@ Summary(pl):	mISDN - modularny ISDN
 Name:		mISDN
 Version:	1.0.4
 Release:	%{_rel}
+Epoch:		1
 License:	GPL
 Group:		Base/Kernel
 Source0:	http://www.misdn.org/downloads/releases/%{name}-%{mISDN_version}.tar.gz
