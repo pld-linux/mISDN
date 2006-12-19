@@ -85,9 +85,9 @@ Pliki nag³ówkowe mISDN.
 %prep
 %setup -q -n %{name}-%{mISDN_version}
 
-
 %build
-
+mv include/linux drivers/isdn/hardware/mISDN/
+sed -e 's#$(.*)#m#g' drivers/isdn/hardware/mISDN/Makefile.v2.6 > drivers/isdn/hardware/mISDN/Makefile
 %build_kernel_modules -m avmfritz -C drivers/isdn/hardware/mISDN/
 
 %install
