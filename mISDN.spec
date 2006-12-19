@@ -96,7 +96,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_includedir}/linux
 install include/linux/*.h $RPM_BUILD_ROOT%{_includedir}/linux
 
-cd drivers/isdn/hardware
+cd drivers/isdn/hardware/mISDN
 install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/drivers/isdn/hardware/mISDN
 
 sep="%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}"
