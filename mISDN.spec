@@ -4,7 +4,7 @@
 %bcond_without	smp		# don't build SMP module
 %bcond_with	verbose		# verbose build (V=1)
 #
-%define		mISDN_version		1_0_4
+%define		mISDN_version		%(echo %{version} |tr . _)
 
 %define		_rel	0.1
 Summary:	mISDN - modular ISDN
