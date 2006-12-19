@@ -86,9 +86,9 @@ Pliki nag³ówkowe mISDN.
 %setup -q -n %{name}-%{mISDN_version}
 
 %build
-mv include/linux drivers/isdn/hardware/mISDN/
+cp -r include/linux drivers/isdn/hardware/mISDN/
 sed -e 's#$(.*)#m#g' drivers/isdn/hardware/mISDN/Makefile.v2.6 > drivers/isdn/hardware/mISDN/Makefile
-%build_kernel_modules -m avmfritz -C drivers/isdn/hardware/mISDN/
+%build_kernel_modules -m l3udss1,mISDN_capi,mISDN_core,mISDN_dtmf,mISDN_x25dte,mISDN_isac,mISDN_l1,mISDN_l2 -C drivers/isdn/hardware/mISDN/
 
 %install
 rm -rf $RPM_BUILD_ROOT
