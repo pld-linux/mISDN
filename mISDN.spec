@@ -18,7 +18,7 @@ Source0:	http://www.misdn.org/downloads/releases/%{name}-%{mISDN_version}.tar.gz
 # Source0-md5:	0cb49bf91670b67a34802455cad2212d
 URL:		http://www.misdn.org/
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
-BuildRequires:	rpmbuild(macros) >= 1.217
+BuildRequires:	rpmbuild(macros) >= 1.332
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
