@@ -89,7 +89,7 @@ Pliki nag³ówkowe mISDN.
 %build
 cp -r include/linux drivers/isdn/hardware/mISDN/
 
-cat add.config > drivers/isdn/hardware/mISDN/Makefile
+sed s/CONFIG_MISDN_MEMDEBUG=y//g add.config > drivers/isdn/hardware/mISDN/Makefile
 echo "CONFIG_MISDN_NETJET=y" >> drivers/isdn/hardware/mISDN/Makefile
 echo "CONFIG_MISDN_HFCUSB=y" >> drivers/isdn/hardware/mISDN/Makefile
 echo "CONFIG_MISDN_HFCMINI=y" >> drivers/isdn/hardware/mISDN/Makefile
