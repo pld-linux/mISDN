@@ -40,6 +40,7 @@ Requires(post,postun):	/sbin/depmod
 %requires_releq_kernel_up
 Requires(postun):	%releq_kernel_up
 %endif
+Provides:	kernel(mISDN)
 
 %description -n kernel-isdn-mISDN
 This is driver for mISDN for Linux.
@@ -61,6 +62,7 @@ Requires(post,postun):	/sbin/depmod
 %requires_releq_kernel_smp
 Requires(postun):	%releq_kernel_smp
 %endif
+Provides:	kernel(mISDN)
 
 %description -n kernel-smp-isdn-mISDN
 This is driver for mISDN for Linux.
