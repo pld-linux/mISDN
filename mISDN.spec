@@ -8,7 +8,7 @@
 
 %define		_rel	0.1
 Summary:	mISDN - modular ISDN
-Summary(pl):	mISDN - modularny ISDN
+Summary(pl.UTF-8):   mISDN - modularny ISDN
 Name:		mISDN
 Version:	1.0.4
 Release:	%{_rel}
@@ -26,13 +26,13 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 mISDN (modular ISDN) is the new ISDN stack of the Linux kernel version
 2.6.
 
-%description -l pl
-mISDN (modularny ISDN) to nowy stos ISDN dla j±dra Linuksa w wersji
+%description -l pl.UTF-8
+mISDN (modularny ISDN) to nowy stos ISDN dla jƒÖdra Linuksa w wersji
 2.6.
 
 %package -n kernel-isdn-mISDN
 Summary:	Linux driver for mISDN
-Summary(pl):	Sterownik dla Linuksa do mISDN
+Summary(pl.UTF-8):   Sterownik dla Linuksa do mISDN
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
@@ -47,14 +47,14 @@ This is driver for mISDN for Linux.
 
 This package contains Linux module.
 
-%description -n kernel-isdn-mISDN -l pl
+%description -n kernel-isdn-mISDN -l pl.UTF-8
 Sterownik dla Linuksa do mISDN.
 
-Ten pakiet zawiera modu≥ j±dra Linuksa.
+Ten pakiet zawiera modu≈Ç jƒÖdra Linuksa.
 
 %package -n kernel-smp-isdn-mISDN
 Summary:	Linux SMP driver for mISDN
-Summary(pl):	Sterownik dla Linuksa SMP do mISDN
+Summary(pl.UTF-8):   Sterownik dla Linuksa SMP do mISDN
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
@@ -69,21 +69,21 @@ This is driver for mISDN for Linux.
 
 This package contains Linux SMP module.
 
-%description -n kernel-smp-isdn-mISDN -l pl
+%description -n kernel-smp-isdn-mISDN -l pl.UTF-8
 Sterownik dla Linuksa do mISDN.
 
-Ten pakiet zawiera modu≥ j±dra Linuksa SMP.
+Ten pakiet zawiera modu≈Ç jƒÖdra Linuksa SMP.
 
 %package devel
 Summary:	Development header files for mISDN
-Summary(pl):	Pliki nag≥Ûwkowe mISDN
+Summary(pl.UTF-8):   Pliki nag≈Ç√≥wkowe mISDN
 Group:		Development/Libraries
 
 %description devel
 Development header files for mISDN.
 
-%description devel -l pl
-Pliki nag≥Ûwkowe mISDN.
+%description devel -l pl.UTF-8
+Pliki nag≈Ç√≥wkowe mISDN.
 
 %prep
 %setup -q -n %{name}-%{mISDN_version}
