@@ -8,7 +8,7 @@
 
 %define		_rel	0.1
 Summary:	mISDN - modular ISDN
-Summary(pl.UTF-8):   mISDN - modularny ISDN
+Summary(pl.UTF-8):	mISDN - modularny ISDN
 Name:		mISDN
 Version:	1.0.4
 Release:	%{_rel}
@@ -32,7 +32,7 @@ mISDN (modularny ISDN) to nowy stos ISDN dla jądra Linuksa w wersji
 
 %package -n kernel-isdn-mISDN
 Summary:	Linux driver for mISDN
-Summary(pl.UTF-8):   Sterownik dla Linuksa do mISDN
+Summary(pl.UTF-8):	Sterownik dla Linuksa do mISDN
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
@@ -54,7 +54,7 @@ Ten pakiet zawiera moduł jądra Linuksa.
 
 %package -n kernel-smp-isdn-mISDN
 Summary:	Linux SMP driver for mISDN
-Summary(pl.UTF-8):   Sterownik dla Linuksa SMP do mISDN
+Summary(pl.UTF-8):	Sterownik dla Linuksa SMP do mISDN
 Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
@@ -76,7 +76,7 @@ Ten pakiet zawiera moduł jądra Linuksa SMP.
 
 %package devel
 Summary:	Development header files for mISDN
-Summary(pl.UTF-8):   Pliki nagłówkowe mISDN
+Summary(pl.UTF-8):	Pliki nagłówkowe mISDN
 Group:		Development/Libraries
 
 %description devel
