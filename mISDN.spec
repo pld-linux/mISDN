@@ -6,17 +6,17 @@
 #
 %define		mISDN_version		%(echo %{version} |tr . _)
 
-%define		_rel	0.1
+%define		_rel	1
 Summary:	mISDN - modular ISDN
 Summary(pl.UTF-8):	mISDN - modularny ISDN
 Name:		mISDN
-Version:	1.0.4
+Version:	1.1.0
 Release:	%{_rel}
 Epoch:		1
 License:	GPL
 Group:		Base/Kernel
 Source0:	http://www.misdn.org/downloads/releases/%{name}-%{mISDN_version}.tar.gz
-# Source0-md5:	0cb49bf91670b67a34802455cad2212d
+# Source0-md5:	d6df5def617d9f53f5db13f43ff04aa6
 URL:		http://www.misdn.org/
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
 BuildRequires:	rpmbuild(macros) >= 1.332
