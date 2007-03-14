@@ -1,6 +1,7 @@
 #
 # Conditional build:
 %bcond_without	dist_kernel	# allow non-distribution kernel
+%bcond_without	up		# don't build UP module
 %bcond_without	smp		# don't build SMP module
 %bcond_with	verbose		# verbose build (V=1)
 #
@@ -140,10 +141,12 @@ rm -rf $RPM_BUILD_ROOT
 %postun	-n kernel-smp-isdn-mISDN
 %depmod %{_kernel_ver}smp
 
+%if %{with up} || %{without dist_kernel}
 %files -n kernel-isdn-mISDN
 %defattr(644,root,root,755)
 %dir /lib/modules/%{_kernel_ver}/drivers/isdn/hardware/mISDN
 /lib/modules/%{_kernel_ver}/drivers/isdn/hardware/mISDN/*.ko*
+%endif
 
 %if %{with smp} && %{with dist_kernel}
 %files -n kernel-smp-isdn-mISDN
