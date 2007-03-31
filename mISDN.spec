@@ -11,13 +11,13 @@
 Summary:	mISDN - modular ISDN
 Summary(pl.UTF-8):	mISDN - modularny ISDN
 Name:		mISDN
-Version:	1.1.0
+Version:	1.1.1
 Release:	%{_rel}
 Epoch:		1
 License:	GPL
 Group:		Base/Kernel
 Source0:	http://www.misdn.org/downloads/releases/%{name}-%{mISDN_version}.tar.gz
-# Source0-md5:	d6df5def617d9f53f5db13f43ff04aa6
+# Source0-md5:	987c660f88c8bab5e43111c48c454dc4
 URL:		http://www.misdn.org/
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
 BuildRequires:	rpmbuild(macros) >= 1.332
