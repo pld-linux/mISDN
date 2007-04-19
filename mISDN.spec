@@ -1,8 +1,6 @@
 #
 # Conditional build:
 %bcond_without	dist_kernel	# allow non-distribution kernel
-%bcond_without	up		# don't build UP module
-%bcond_without	smp		# don't build SMP module
 %bcond_with	verbose		# verbose build (V=1)
 #
 %define		mISDN_version		%(echo %{version} |tr . _)
@@ -38,8 +36,8 @@ Release:	%{_rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
 %if %{with dist_kernel}
-%requires_releq_kernel_up
-Requires(postun):	%releq_kernel_up
+%requires_releq_kernel
+Requires(postun):	%releq_kernel
 %endif
 Provides:	kernel(mISDN)
 
@@ -52,28 +50,6 @@ This package contains Linux module.
 Sterownik dla Linuksa do mISDN.
 
 Ten pakiet zawiera moduł jądra Linuksa.
-
-%package -n kernel-smp-isdn-mISDN
-Summary:	Linux SMP driver for mISDN
-Summary(pl.UTF-8):	Sterownik dla Linuksa SMP do mISDN
-Release:	%{_rel}@%{_kernel_ver_str}
-Group:		Base/Kernel
-Requires(post,postun):	/sbin/depmod
-%if %{with dist_kernel}
-%requires_releq_kernel_smp
-Requires(postun):	%releq_kernel_smp
-%endif
-Provides:	kernel(mISDN)
-
-%description -n kernel-smp-isdn-mISDN
-This is driver for mISDN for Linux.
-
-This package contains Linux SMP module.
-
-%description -n kernel-smp-isdn-mISDN -l pl.UTF-8
-Sterownik dla Linuksa do mISDN.
-
-Ten pakiet zawiera moduł jądra Linuksa SMP.
 
 %package devel
 Summary:	Development header files for mISDN
@@ -113,18 +89,11 @@ install include/linux/*.h $RPM_BUILD_ROOT%{_includedir}/linux
 cd drivers/isdn/hardware/mISDN
 install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/drivers/isdn/hardware/mISDN
 
-sep="%{?with_dist_kernel:up}%{!?with_dist_kernel:nondist}"
+sep="%{?with_dist_kernel:dist}%{!?with_dist_kernel:nondist}"
 for mod in *-${sep}.ko; do
 	m=$(echo "$mod" | sed -e "s#-${sep}.ko##g")
 	install "$mod" $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/drivers/isdn/hardware/mISDN/${m}.ko
 done
-
-%if %{with smp} && %{with dist_kernel}
-for mod in *-smp.ko; do
-	m=$(echo "$mod" | sed -e 's#-smp.ko##g')
-	install "$mod" $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}smp/drivers/isdn/hardware/mISDN/${m}.ko
-done
-%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -135,25 +104,10 @@ rm -rf $RPM_BUILD_ROOT
 %postun	-n kernel-isdn-mISDN
 %depmod %{_kernel_ver}
 
-%post	-n kernel-smp-isdn-mISDN
-%depmod %{_kernel_ver}smp
-
-%postun	-n kernel-smp-isdn-mISDN
-%depmod %{_kernel_ver}smp
-
-%if %{with up} || %{without dist_kernel}
 %files -n kernel-isdn-mISDN
 %defattr(644,root,root,755)
 %dir /lib/modules/%{_kernel_ver}/drivers/isdn/hardware/mISDN
 /lib/modules/%{_kernel_ver}/drivers/isdn/hardware/mISDN/*.ko*
-%endif
-
-%if %{with smp} && %{with dist_kernel}
-%files -n kernel-smp-isdn-mISDN
-%defattr(644,root,root,755)
-%dir /lib/modules/%{_kernel_ver}smp/drivers/isdn/hardware/mISDN
-/lib/modules/%{_kernel_ver}smp/drivers/isdn/hardware/mISDN/*.ko*
-%endif
 
 %files devel
 %defattr(644,root,root,755)
