@@ -96,13 +96,21 @@ sed s/CONFIG_MISDN_MEMDEBUG=y//g add.config > drivers/isdn/hardware/mISDN/Makefi
 echo "CONFIG_MISDN_NETJET=y" >> drivers/isdn/hardware/mISDN/Makefile
 echo "CONFIG_MISDN_HFCUSB=y" >> drivers/isdn/hardware/mISDN/Makefile
 echo "CONFIG_MISDN_HFCMINI=y" >> drivers/isdn/hardware/mISDN/Makefile
+
+%ifnarch ppc ppc64 sparc sparc64 mips
 echo "CONFIG_MISDN_HFCMULTI=y" >> drivers/isdn/hardware/mISDN/Makefile
+%endif
+
 echo "CONFIG_MISDN_XHFC=y" >> drivers/isdn/hardware/mISDN/Makefile
 echo "CONFIG_MISDN_DSP=y" >> drivers/isdn/hardware/mISDN/Makefile
 echo "CONFIG_MISDN_LOOP=y" >> drivers/isdn/hardware/mISDN/Makefile
 
 sed -e 's#$(.*)#m#g' drivers/isdn/hardware/mISDN/Makefile.v2.6 >> drivers/isdn/hardware/mISDN/Makefile
-%build_kernel_modules -m l3udss1,mISDN_capi,mISDN_core,mISDN_dtmf,mISDN_x25dte,mISDN_isac,mISDN_l1,mISDN_l2,avmfritz,netjetpci,hfcpci,hfcsusb,hfcsmini,sedlfax,w6692pci,hfcmulti,xhfc,mISDN_dsp,mISDN_loop -C drivers/isdn/hardware/mISDN/
+%build_kernel_modules -m l3udss1,mISDN_capi,mISDN_core,mISDN_dtmf,mISDN_x25dte,mISDN_isac,mISDN_l1,mISDN_l2,avmfritz,netjetpci,hfcpci,hfcsusb,hfcsmini,sedlfax,w6692pci,xhfc,mISDN_dsp,mISDN_loop -C drivers/isdn/hardware/mISDN/
+
+%ifnarch ppc ppc64 sparc sparc64 mips
+%build_kernel_modules -m hfcmulti -C drivers/isdn/hardware/mISDN/
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
