@@ -11,13 +11,13 @@
 Summary:	mISDN - modular ISDN
 Summary(pl.UTF-8):	mISDN - modularny ISDN
 Name:		mISDN
-Version:	1.1.5
+Version:	1.1.6
 Release:	%{_rel}
 Epoch:		1
 License:	GPL
 Group:		Base/Kernel
 Source0:	http://www.misdn.org/downloads/releases/%{name}-%{mISDN_version}.tar.gz
-# Source0-md5:	93b1cff7817b82638a0475c2b7b7f1b6
+# Source0-md5:	c378fcef555ad20835bc54b0b83b2b5b
 URL:		http://www.misdn.org/
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
 BuildRequires:	rpmbuild(macros) >= 1.332
@@ -97,7 +97,7 @@ echo "CONFIG_MISDN_NETJET=y" >> drivers/isdn/hardware/mISDN/Makefile
 echo "CONFIG_MISDN_HFCUSB=y" >> drivers/isdn/hardware/mISDN/Makefile
 echo "CONFIG_MISDN_HFCMINI=y" >> drivers/isdn/hardware/mISDN/Makefile
 
-%ifnarch ppc ppc64 sparc sparc64 mips
+%ifnarch hppa mips ppc ppc64 s390 s390x sparc sparc64
 echo "CONFIG_MISDN_HFCMULTI=y" >> drivers/isdn/hardware/mISDN/Makefile
 %endif
 
@@ -108,7 +108,7 @@ echo "CONFIG_MISDN_LOOP=y" >> drivers/isdn/hardware/mISDN/Makefile
 sed -e 's#$(.*)#m#g' drivers/isdn/hardware/mISDN/Makefile.v2.6 >> drivers/isdn/hardware/mISDN/Makefile
 %build_kernel_modules -m l3udss1,mISDN_capi,mISDN_core,mISDN_dtmf,mISDN_x25dte,mISDN_isac,mISDN_l1,mISDN_l2,avmfritz,netjetpci,hfcpci,hfcsusb,hfcsmini,sedlfax,w6692pci,xhfc,mISDN_dsp,mISDN_loop -C drivers/isdn/hardware/mISDN/
 
-%ifnarch ppc ppc64 sparc sparc64 mips
+%ifnarch hppa mips ppc ppc64 s390 s390x sparc sparc64
 %build_kernel_modules -m hfcmulti -C drivers/isdn/hardware/mISDN/
 %endif
 
