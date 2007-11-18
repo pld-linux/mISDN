@@ -5,6 +5,11 @@
 %bcond_without	smp		# don't build SMP module
 %bcond_with	verbose		# verbose build (V=1)
 #
+%ifarch sparc
+# there is no SMP kernel on sparc32
+%undefine	with_smp
+%endif
+#
 %define		mISDN_version		%(echo %{version} |tr . _)
 
 %define		_rel	1
