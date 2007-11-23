@@ -16,13 +16,13 @@
 Summary:	mISDN - modular ISDN
 Summary(pl.UTF-8):	mISDN - modularny ISDN
 Name:		mISDN
-Version:	1.1.6
+Version:	1.1.7
 Release:	%{_rel}
 Epoch:		1
 License:	GPL
 Group:		Base/Kernel
 Source0:	http://www.misdn.org/downloads/releases/%{name}-%{mISDN_version}.tar.gz
-# Source0-md5:	c378fcef555ad20835bc54b0b83b2b5b
+# Source0-md5:	6f502c8131e3e3a159c72214e0a933bc
 URL:		http://www.misdn.org/
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
 BuildRequires:	rpmbuild(macros) >= 1.332
@@ -33,7 +33,7 @@ mISDN (modular ISDN) is the new ISDN stack of the Linux kernel version
 2.6.
 
 %description -l pl.UTF-8
-mISDN (modularny ISDN) to nowy stos ISDN dla jądra Linuksa w wersji
+mISDN (modularny ISDN) to nowy stos ISDN dla j??dra Linuksa w wersji
 2.6.
 
 %package -n kernel-isdn-mISDN
@@ -56,7 +56,7 @@ This package contains Linux module.
 %description -n kernel-isdn-mISDN -l pl.UTF-8
 Sterownik dla Linuksa do mISDN.
 
-Ten pakiet zawiera moduł jądra Linuksa.
+Ten pakiet zawiera modu?? j??dra Linuksa.
 
 %package -n kernel-smp-isdn-mISDN
 Summary:	Linux SMP driver for mISDN
@@ -78,18 +78,18 @@ This package contains Linux SMP module.
 %description -n kernel-smp-isdn-mISDN -l pl.UTF-8
 Sterownik dla Linuksa do mISDN.
 
-Ten pakiet zawiera moduł jądra Linuksa SMP.
+Ten pakiet zawiera modu?? j??dra Linuksa SMP.
 
 %package devel
 Summary:	Development header files for mISDN
-Summary(pl.UTF-8):	Pliki nagłówkowe mISDN
+Summary(pl.UTF-8):	Pliki nag????wkowe mISDN
 Group:		Development/Libraries
 
 %description devel
 Development header files for mISDN.
 
 %description devel -l pl.UTF-8
-Pliki nagłówkowe mISDN.
+Pliki nag????wkowe mISDN.
 
 %prep
 %setup -q -n %{name}-%{mISDN_version}
