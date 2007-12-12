@@ -29,7 +29,7 @@ mISDN (modular ISDN) is the new ISDN stack of the Linux kernel version
 mISDN (modularny ISDN) to nowy stos ISDN dla jądra Linuksa w wersji
 2.6.
 
-%package -n kernel-isdn-mISDN
+%package -n kernel%{_alt_kernel}-isdn-mISDN
 Summary:	Linux driver for mISDN
 Summary(pl.UTF-8):	Sterownik dla Linuksa do mISDN
 Release:	%{_rel}@%{_kernel_ver_str}
@@ -41,12 +41,12 @@ Requires(postun):	%releq_kernel
 %endif
 Provides:	kernel(mISDN)
 
-%description -n kernel-isdn-mISDN
+%description -n kernel%{_alt_kernel}-isdn-mISDN
 This is driver for mISDN for Linux.
 
 This package contains Linux module.
 
-%description -n kernel-isdn-mISDN -l pl.UTF-8
+%description -n kernel%{_alt_kernel}-isdn-mISDN -l pl.UTF-8
 Sterownik dla Linuksa do mISDN.
 
 Ten pakiet zawiera moduł jądra Linuksa.
@@ -93,27 +93,25 @@ install -d $RPM_BUILD_ROOT%{_includedir}/linux
 install include/linux/*.h $RPM_BUILD_ROOT%{_includedir}/linux
 
 cd drivers/isdn/hardware/mISDN
-install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/drivers/isdn/hardware/mISDN
+install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/kernel/drivers/isdn/hardware/mISDN
 
 sep="%{?with_dist_kernel:dist}%{!?with_dist_kernel:nondist}"
-for mod in *-${sep}.ko; do
-	m=$(echo "$mod" | sed -e "s#-${sep}.ko##g")
-	install "$mod" $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}/drivers/isdn/hardware/mISDN/${m}.ko
-done
+mods=$(echo *-${sep}.ko | sed -e "s#-${sep}.ko##g" -e 's# #,#g')
+%install_kernel_modules -m $mods -d kernel/drivers/isdn/hardware/mISDN
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post	-n kernel-isdn-mISDN
+%post	-n kernel%{_alt_kernel}-isdn-mISDN
 %depmod %{_kernel_ver}
 
-%postun	-n kernel-isdn-mISDN
+%postun	-n kernel%{_alt_kernel}-isdn-mISDN
 %depmod %{_kernel_ver}
 
-%files -n kernel-isdn-mISDN
+%files -n kernel%{_alt_kernel}-isdn-mISDN
 %defattr(644,root,root,755)
-%dir /lib/modules/%{_kernel_ver}/drivers/isdn/hardware/mISDN
-/lib/modules/%{_kernel_ver}/drivers/isdn/hardware/mISDN/*.ko*
+%dir /lib/modules/%{_kernel_ver}/kernel/drivers/isdn/hardware/mISDN
+/lib/modules/%{_kernel_ver}/kernel/drivers/isdn/hardware/mISDN/*.ko*
 
 %files devel
 %defattr(644,root,root,755)
