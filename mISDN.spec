@@ -29,6 +29,21 @@ mISDN (modular ISDN) is the new ISDN stack of the Linux kernel version
 mISDN (modularny ISDN) to nowy stos ISDN dla jądra Linuksa w wersji
 2.6.
 
+%package init
+Summary:	init scripts for mISDN
+Summary(pl.UTF-8): Skrypty inicjalizujące dla mISDN
+Group:		Applications/Communications
+Requires:	bc
+Requires(post,preun):	/sbin/chkconfig
+Requires:	rc-scripts
+Requires:	which
+
+%description init
+mISDN boot-time initialization.
+
+%description init -l pl.UTF-8
+Inicjalizacja mISDN w czasie startu systemu.
+
 %package -n kernel%{_alt_kernel}-isdn-mISDN
 Summary:	Linux driver for mISDN
 Summary(pl.UTF-8):	Sterownik dla Linuksa do mISDN
@@ -89,12 +104,17 @@ sed -e 's#$(.*)#m#g' drivers/isdn/hardware/mISDN/Makefile.v2.6 >> drivers/isdn/h
 %install
 rm -rf $RPM_BUILD_ROOT
 
+# init files
+install -d $RPM_BUILD_ROOT{%{_bindir},/etc/rc.d/init.d}
+install std2kern stddiff $RPM_BUILD_ROOT%{_bindir}
+install misdn-init $RPM_BUILD_ROOT/etc/rc.d/init.d
+
+# devel files
 install -d $RPM_BUILD_ROOT%{_includedir}/linux
 install include/linux/*.h $RPM_BUILD_ROOT%{_includedir}/linux
 
+# kernel modules
 cd drivers/isdn/hardware/mISDN
-install -d $RPM_BUILD_ROOT/lib/modules/%{_kernel_ver}{,smp}/kernel/drivers/isdn/hardware/mISDN
-
 sep="%{?with_dist_kernel:dist}%{!?with_dist_kernel:nondist}"
 mods=$(echo *-${sep}.ko | sed -e "s#-${sep}.ko##g" -e 's# #,#g')
 %install_kernel_modules -m $mods -d kernel/drivers/isdn/hardware/mISDN
@@ -102,11 +122,27 @@ mods=$(echo *-${sep}.ko | sed -e "s#-${sep}.ko##g" -e 's# #,#g')
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post init
+/sbin/chkconfig --add misdn-init
+%service misdn-init restart
+
+%preun init
+if [ "$1" = "0" ]; then
+	%service misdn-init stop
+	/sbin/chkconfig --del misdn-init
+fi
+
 %post	-n kernel%{_alt_kernel}-isdn-mISDN
 %depmod %{_kernel_ver}
 
 %postun	-n kernel%{_alt_kernel}-isdn-mISDN
 %depmod %{_kernel_ver}
+
+%files init
+%defattr(644,root,root,755)
+%doc README.misdn-init
+%attr(754,root,root) /etc/rc.d/init.d/*
+%attr(755,root,root) %{_bindir}/*
 
 %files -n kernel%{_alt_kernel}-isdn-mISDN
 %defattr(644,root,root,755)
