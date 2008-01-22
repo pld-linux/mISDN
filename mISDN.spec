@@ -5,12 +5,12 @@
 #
 %define		mISDN_version		%(echo %{version} |tr . _)
 
-%define		_rel	4
+%define		rel	5
 Summary:	mISDN - modular ISDN
 Summary(pl.UTF-8):	mISDN - modularny ISDN
 Name:		mISDN
 Version:	1.1.7
-Release:	%{_rel}
+Release:	%{rel}
 Epoch:		1
 License:	GPL
 Group:		Base/Kernel
@@ -47,7 +47,7 @@ Inicjalizacja mISDN w czasie startu systemu.
 %package -n kernel%{_alt_kernel}-isdn-mISDN
 Summary:	Linux driver for mISDN
 Summary(pl.UTF-8):	Sterownik dla Linuksa do mISDN
-Release:	%{_rel}@%{_kernel_ver_str}
+Release:	%{rel}@%{_kernel_ver_str}
 Group:		Base/Kernel
 Requires(post,postun):	/sbin/depmod
 %if %{with dist_kernel}
