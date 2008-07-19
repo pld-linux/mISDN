@@ -5,7 +5,7 @@
 #
 %define		mISDN_version		%(echo %{version} |tr . _)
 
-%define		rel	4
+%define		rel	5
 Summary:	mISDN - modular ISDN
 Summary(pl.UTF-8):	mISDN - modularny ISDN
 Name:		mISDN
