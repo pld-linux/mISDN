@@ -1,4 +1,9 @@
 #
+# TODO:
+#		- remove from cvs when 2.6.27@kernel.spec will be ready.
+#		http://lwn.net/Articles/291630/
+#
+#
 # Conditional build:
 %bcond_without	dist_kernel	# allow non-distribution kernel
 %bcond_with	verbose		# verbose build (V=1)
