@@ -1,16 +1,19 @@
 #
 # TODO:
-#		- remove from cvs when 2.6.27@kernel.spec will be ready.
-#		http://lwn.net/Articles/291630/
-#
+# - shouldn't headers be provided by 2.6.27 linux-libc-headers instead of -devel here?
 #
 # Conditional build:
+%bcond_with	kernel
 %bcond_without	dist_kernel	# allow non-distribution kernel
 %bcond_with	verbose		# verbose build (V=1)
 #
+%if %{without kernel}
+%undefine       with_dist_kernel
+%endif
+#
 %define		mISDN_version		%(echo %{version} |tr . _)
 
-%define		rel	11
+%define		rel	12
 Summary:	mISDN - modular ISDN
 Summary(pl.UTF-8):	mISDN - modularny ISDN
 Name:		mISDN
@@ -86,6 +89,8 @@ Pliki nagłówkowe mISDN.
 %setup -q -n %{name}-%{mISDN_version}
 
 %build
+
+%if %{with kernel}
 cp -r include/linux drivers/isdn/hardware/mISDN/
 
 sed s/CONFIG_MISDN_MEMDEBUG=y//g add.config > drivers/isdn/hardware/mISDN/Makefile
@@ -106,6 +111,8 @@ sed -e 's#$(.*)#m#g' drivers/isdn/hardware/mISDN/Makefile.v2.6 >> drivers/isdn/h
 %build_kernel_modules -m hfcmulti -C drivers/isdn/hardware/mISDN/
 %endif
 
+%endif
+
 %install
 rm -rf $RPM_BUILD_ROOT
 
@@ -118,11 +125,13 @@ install misdn-init $RPM_BUILD_ROOT/etc/rc.d/init.d
 install -d $RPM_BUILD_ROOT%{_includedir}/linux
 install include/linux/*.h $RPM_BUILD_ROOT%{_includedir}/linux
 
+%if %{with kernel}
 # kernel modules
 cd drivers/isdn/hardware/mISDN
 sep="%{?with_dist_kernel:dist}%{!?with_dist_kernel:nondist}"
 mods=$(echo *-${sep}.ko | sed -e "s#-${sep}.ko##g" -e 's# #,#g')
 %install_kernel_modules -m $mods -d kernel/drivers/isdn/hardware/mISDN
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -149,10 +158,12 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/*
 %attr(755,root,root) %{_bindir}/*
 
+%if %{with kernel}
 %files -n kernel%{_alt_kernel}-isdn-mISDN
 %defattr(644,root,root,755)
 %dir /lib/modules/%{_kernel_ver}/kernel/drivers/isdn/hardware/mISDN
 /lib/modules/%{_kernel_ver}/kernel/drivers/isdn/hardware/mISDN/*.ko*
+%endif
 
 %files devel
 %defattr(644,root,root,755)
