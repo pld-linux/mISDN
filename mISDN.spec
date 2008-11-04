@@ -3,7 +3,7 @@
 # - shouldn't headers be provided by 2.6.27 linux-libc-headers instead of -devel here?
 #
 # Conditional build:
-%bcond_with	kernel
+%bcond_with	kernel		# mISDN merged in 2.6.27, defaults off
 %bcond_without	dist_kernel	# allow non-distribution kernel
 %bcond_with	verbose		# verbose build (V=1)
 #
