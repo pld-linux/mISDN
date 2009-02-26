@@ -143,6 +143,7 @@ for mod in *-smp.ko; do
 done
 %endif
 
+install -d /etc/rc.d/init.d
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/misdn
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/misdn-init.conf
 
