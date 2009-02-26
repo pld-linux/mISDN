@@ -27,6 +27,8 @@ Source1:	%{name}.init
 Source2:	misdn-init.conf
 Patch0:		http://quadbri.phoniceq.com/driver/misdn/misdn-enableLEDS-mISDN-1_1_7_2.patch
 URL:		http://www.misdn.org/
+Requires:	bc
+Requires:	usbutils
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
 BuildRequires:	rpmbuild(macros) >= 1.332
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
