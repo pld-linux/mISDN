@@ -1,0 +1,60 @@
+--- drivers/isdn/hardware/mISDN/hfc_multi.c	2008-01-18 10:24:50.000000000 +0100
++++ drivers/isdn/hardware/mISDN/hfc_multi.c	2008-02-01 17:32:08.000000000 +0100
+@@ -183,7 +183,7 @@
+ 	 "HFC-E1 CCAG Eval", 1, 0, 1}, /* E1 only supports single clock */
+ #endif
+ 	{CCAG_VID, CCAG_VID, HFC4S_ID, 0x08B4, VENDOR_CCD,
+-	 "HFC-4S CCAG Eval (old)", 0, 4, 0, 0, 0},
++	 "HFC-4S PhonicEQ Inc. Card", 0, 4, 0, 4, 0},
+ 	{CCAG_VID, CCAG_VID, HFC8S_ID, 0x16B8, VENDOR_CCD,
+ 	 "HFC-8S CCAG Eval (old)", 0, 8, 0, 0, 0},
+ 	{CCAG_VID, CCAG_VID, HFCE1_ID, 0x30B1, VENDOR_CCD,
+@@ -948,6 +948,12 @@
+ 		HFC_outb(hc, R_GPIO_EN1, 0xff);
+ 		HFC_outb(hc, R_GPIO_OUT1, 0x00);
+ 		break;
++
++		case 4:
++		HFC_outb(hc, R_GPIO_SEL, 0xf<<4);
++		HFC_outb(hc, R_GPIO_EN1, 0xff);
++		HFC_outb(hc, R_GPIO_OUT1, 0x00);
++		break;
+ 	}
+ 
+ 	/* set master clock */
+@@ -1205,6 +1211,35 @@
+ 		}
+ 
+ 		break;
++
++		case 4: /* PhonicEQ Inc. */
++		/* red blinking = PH_DEACTIVATE
++		   red steady = PH_ACTIVATE
++		   green flashing = fifo activity
++		*/
++		i = 0;
++		while(i < 4) {
++			state = 0;
++			active = -1;
++			dch = hc->chan[(i<<2)|2].ch;
++			if (dch && test_bit(FLG_DCHANNEL, &dch->Flags)) {
++				state = dch->state;
++				active = test_bit(HFC_CFG_NTMODE, &hc->chan[dch->channel].cfg)?3:7;
++			}
++
++			if (state) {
++				if (state==active)
++					led[i] = 1; /* led green */
++				else
++					led[i] = 0; /* led off */
++			} else
++				led[i] = 0; /* led off */
++			i++;
++		}
++
++		HFC_outb(hc, R_GPIO_OUT1,(~led[0]&1) | led[0] << 1 | (~led[1]&1) << 2 | led[1] << 3 | (~led[2]&1) << 4 | led[2] << 5 | (~led[3]&1) << 6 | led[3] << 7);
++		break;
++
+ 	}
+ }
+ /**************************/
