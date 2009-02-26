@@ -10,19 +10,22 @@
 %undefine	with_smp
 %endif
 #
-%define		mISDN_version		%(echo %{version} |tr . _)
+%define		mISDN_version		%(echo %{version} |tr . _).1
 
 %define		_rel	1
 Summary:	mISDN - modular ISDN
 Summary(pl.UTF-8):	mISDN - modularny ISDN
 Name:		mISDN
-Version:	1.1.8
+Version:	1.1.9
 Release:	%{_rel}
 Epoch:		1
 License:	GPL
 Group:		Base/Kernel
 Source0:	http://www.misdn.org/downloads/releases/%{name}-%{mISDN_version}.tar.gz
-# Source0-md5:	29c55ffe0b35668a41eaed3b1c3ddfe2
+# Source0-md5:	4a82ba9eb37b45aea4821f83eece6140
+Source1:	%{name}.init
+Source2:	misdn-init.conf
+Patch0:		http://quadbri.phoniceq.com/driver/misdn/misdn-enableLEDS-mISDN-1_1_7_2.patch
 URL:		http://www.misdn.org/
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
 BuildRequires:	rpmbuild(macros) >= 1.332
@@ -33,7 +36,7 @@ mISDN (modular ISDN) is the new ISDN stack of the Linux kernel version
 2.6.
 
 %description -l pl.UTF-8
-mISDN (modularny ISDN) to nowy stos ISDN dla j??dra Linuksa w wersji
+mISDN (modularny ISDN) to nowy stos ISDN dla jądra Linuksa w wersji
 2.6.
 
 %package -n kernel-isdn-mISDN
@@ -56,7 +59,7 @@ This package contains Linux module.
 %description -n kernel-isdn-mISDN -l pl.UTF-8
 Sterownik dla Linuksa do mISDN.
 
-Ten pakiet zawiera modu?? j??dra Linuksa.
+Ten pakiet zawiera moduł jądra Linuksa.
 
 %package -n kernel-smp-isdn-mISDN
 Summary:	Linux SMP driver for mISDN
@@ -78,21 +81,22 @@ This package contains Linux SMP module.
 %description -n kernel-smp-isdn-mISDN -l pl.UTF-8
 Sterownik dla Linuksa do mISDN.
 
-Ten pakiet zawiera modu?? j??dra Linuksa SMP.
+Ten pakiet zawiera moduł jądra Linuksa SMP.
 
 %package devel
 Summary:	Development header files for mISDN
-Summary(pl.UTF-8):	Pliki nag????wkowe mISDN
+Summary(pl.UTF-8):	Pliki nagłówkowe mISDN
 Group:		Development/Libraries
 
 %description devel
 Development header files for mISDN.
 
 %description devel -l pl.UTF-8
-Pliki nag????wkowe mISDN.
+Pliki nagówwkowe mISDN.
 
 %prep
 %setup -q -n %{name}-%{mISDN_version}
+%patch0 -p0
 
 %build
 cp -r include/linux drivers/isdn/hardware/mISDN/
@@ -139,6 +143,9 @@ for mod in *-smp.ko; do
 done
 %endif
 
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/misdn
+install %{SOURCE2} $RPM_BUILD_ROOT/etc/misdn-init.conf
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -153,6 +160,21 @@ rm -rf $RPM_BUILD_ROOT
 
 %postun	-n kernel-smp-isdn-mISDN
 %depmod %{_kernel_ver}smp
+
+%post
+/sbin/chkconfig --add %{name}
+%service %{name} restart
+
+%preun
+if [ "$1" = "0" ]; then
+        %service %{name} stop
+	/sbin/chkconfig --del %{name}
+fi
+
+%files
+%defattr(644,root,root,755)
+%attr(754,root,root) /etc/rc.d/init.d/*
+%config(noreplace) %verify(not md5 mtime size) /etc/misdn-init.conf
 
 %if %{with up} || %{without dist_kernel}
 %files -n kernel-isdn-mISDN
