@@ -45,6 +45,7 @@ Requires:	bc
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
 Requires:	which
+Requires:	/usr/sbin/lsusb
 
 %description init
 mISDN boot-time initialization.
