@@ -10,19 +10,19 @@
 %undefine	with_smp
 %endif
 #
-%define		mISDN_version		%(echo %{version} |tr . _).1
+%define		mISDN_version		%(echo %{version} |tr . _)
 
 %define		_rel	1
 Summary:	mISDN - modular ISDN
 Summary(pl.UTF-8):	mISDN - modularny ISDN
 Name:		mISDN
-Version:	1.1.9
+Version:	1.1.9.2
 Release:	%{_rel}
 Epoch:		1
 License:	GPL
 Group:		Base/Kernel
 Source0:	http://www.misdn.org/downloads/releases/%{name}-%{mISDN_version}.tar.gz
-# Source0-md5:	4a82ba9eb37b45aea4821f83eece6140
+# Source0-md5:	f9ec111fcc40c9ef48fc1822317998be
 Source1:	%{name}.init
 Source2:	misdn-init.conf
 Patch0:		http://quadbri.phoniceq.com/driver/misdn/misdn-enableLEDS-mISDN-1_1_7_2.patch
