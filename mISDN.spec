@@ -11,19 +11,19 @@
 %undefine       with_dist_kernel
 %endif
 #
-%define		mISDN_version		%(echo %{version} |tr . _).1
+%define		mISDN_version		%(echo %{version} |tr . _)
 
-%define		rel	13
+%define		rel	1
 Summary:	mISDN - modular ISDN
 Summary(pl.UTF-8):	mISDN - modularny ISDN
 Name:		mISDN
-Version:	1.1.9
+Version:	1.1.9.2
 Release:	%{rel}
 Epoch:		1
 License:	GPL
 Group:		Base/Kernel
 Source0:	http://www.misdn.org/downloads/releases/%{name}-%{mISDN_version}.tar.gz
-# Source0-md5:	4a82ba9eb37b45aea4821f83eece6140
+# Source0-md5:	f9ec111fcc40c9ef48fc1822317998be
 URL:		http://www.misdn.org/
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
 BuildRequires:	rpmbuild(macros) >= 1.332
@@ -39,13 +39,13 @@ mISDN (modularny ISDN) to nowy stos ISDN dla jądra Linuksa w wersji
 
 %package init
 Summary:	init scripts for mISDN
-Summary(pl.UTF-8): Skrypty inicjalizujące dla mISDN
+Summary(pl.UTF-8):	Skrypty inicjalizujące dla mISDN
 Group:		Applications/Communications
-Requires:	bc
 Requires(post,preun):	/sbin/chkconfig
+Requires:	/usr/sbin/lsusb
+Requires:	bc
 Requires:	rc-scripts
 Requires:	which
-Requires:	/usr/sbin/lsusb
 
 %description init
 mISDN boot-time initialization.
