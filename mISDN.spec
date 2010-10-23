@@ -11,7 +11,7 @@
 %undefine       with_dist_kernel
 %endif
 #
-%define		mISDN_version		%(echo %{version} |tr . _)
+%define		upstream_version		%(echo %{version} |tr . _)
 
 %define		rel	1
 Summary:	mISDN - modular ISDN
@@ -22,7 +22,7 @@ Release:	%{rel}
 Epoch:		1
 License:	GPL
 Group:		Base/Kernel
-Source0:	http://www.misdn.org/downloads/releases/%{name}-%{mISDN_version}.tar.gz
+Source0:	http://www.misdn.org/downloads/releases/%{name}-%{upstream_version}.tar.gz
 # Source0-md5:	f9ec111fcc40c9ef48fc1822317998be
 URL:		http://www.misdn.org/
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
@@ -87,7 +87,7 @@ Development header files for mISDN.
 Pliki nagłówkowe mISDN.
 
 %prep
-%setup -q -n %{name}-%{mISDN_version}
+%setup -q -n %{name}-%{upstream_version}
 
 %build
 
