@@ -13,7 +13,7 @@
 #
 %define		upstream_version		%(echo %{version} |tr . _)
 
-%define		rel	1
+%define		rel	2
 Summary:	mISDN - modular ISDN
 Summary(pl.UTF-8):	mISDN - modularny ISDN
 Name:		mISDN
@@ -42,7 +42,7 @@ Summary:	init scripts for mISDN
 Summary(pl.UTF-8):	Skrypty inicjalizujące dla mISDN
 Group:		Applications/Communications
 Requires(post,preun):	/sbin/chkconfig
-Requires:	/usr/sbin/lsusb
+Requires:	/usr/bin/lsusb
 Requires:	bc
 Requires:	rc-scripts
 Requires:	which
