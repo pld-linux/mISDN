@@ -3,7 +3,7 @@
 # - shouldn't headers be provided by 2.6.27 linux-libc-headers instead of -devel here?
 #
 # Conditional build:
-%bcond_with	kernel		# mISDN merged in 2.6.27, defaults off
+%bcond_with	kernel		# mISDN merged in 2.6.27, needs update if needed
 %bcond_without	dist_kernel	# allow non-distribution kernel
 %bcond_with	verbose		# verbose build (V=1)
 #
@@ -11,47 +11,33 @@
 %undefine       with_dist_kernel
 %endif
 #
-%define		upstream_version		%(echo %{version} |tr . _)
-
-%define		rel	2
+%define		rel	1
 Summary:	mISDN - modular ISDN
 Summary(pl.UTF-8):	mISDN - modularny ISDN
 Name:		mISDN
-Version:	1.1.9.2
+Version:	2.0.35
 Release:	%{rel}
 Epoch:		1
-License:	GPL
+License:	GPL v2+
 Group:		Base/Kernel
-Source0:	http://www.misdn.org/downloads/releases/%{name}-%{upstream_version}.tar.gz
-# Source0-md5:	f9ec111fcc40c9ef48fc1822317998be
-URL:		http://www.misdn.org/
+# git clone git://git.misdn.eu/mISDN.git
+# git archive --format=tar --prefix=mISDN-2.0.35/ v2.0.35 | xz > ../mISDN-2.0.35.tar.xz
+Source0:	%{name}-%{version}.tar.xz
+# Source0-md5:	2c35bb1b3ebfaf40914360f5328d134d
+URL:		https://www.misdn.eu/wiki/Main_Page
 %{?with_dist_kernel:BuildRequires:	kernel-module-build >= 3:2.6.7}
 BuildRequires:	rpmbuild(macros) >= 1.332
+BuildRequires:	tar >= 1:1.22
+BuildRequires:	xz
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 mISDN (modular ISDN) is the new ISDN stack of the Linux kernel version
-2.6.
+2.6+.
 
 %description -l pl.UTF-8
 mISDN (modularny ISDN) to nowy stos ISDN dla jądra Linuksa w wersji
-2.6.
-
-%package init
-Summary:	init scripts for mISDN
-Summary(pl.UTF-8):	Skrypty inicjalizujące dla mISDN
-Group:		Applications/Communications
-Requires(post,preun):	/sbin/chkconfig
-Requires:	/usr/bin/lsusb
-Requires:	bc
-Requires:	rc-scripts
-Requires:	which
-
-%description init
-mISDN boot-time initialization.
-
-%description init -l pl.UTF-8
-Inicjalizacja mISDN w czasie startu systemu.
+2.6 i nowszych.
 
 %package -n kernel%{_alt_kernel}-isdn-mISDN
 Summary:	Linux driver for mISDN
@@ -87,40 +73,25 @@ Development header files for mISDN.
 Pliki nagłówkowe mISDN.
 
 %prep
-%setup -q -n %{name}-%{upstream_version}
+%setup -q
 
 %build
-
 %if %{with kernel}
+%configure
+cp mISDN.cfg.default standalone/mISDN.cfg
+
+# insufficient, needs update?
 cp -r include/linux drivers/isdn/hardware/mISDN/
 
-sed s/CONFIG_MISDN_MEMDEBUG=y//g add.config > drivers/isdn/hardware/mISDN/Makefile
-echo "CONFIG_MISDN_NETJET=y" >> drivers/isdn/hardware/mISDN/Makefile
-echo "CONFIG_MISDN_HFCUSB=y" >> drivers/isdn/hardware/mISDN/Makefile
-echo "CONFIG_MISDN_HFCMINI=y" >> drivers/isdn/hardware/mISDN/Makefile
-%ifnarch hppa mips ppc ppc64 s390 s390x sparc sparc64
-echo "CONFIG_MISDN_HFCMULTI=y" >> drivers/isdn/hardware/mISDN/Makefile
-%endif
-echo "CONFIG_MISDN_XHFC=y" >> drivers/isdn/hardware/mISDN/Makefile
-echo "CONFIG_MISDN_DSP=y" >> drivers/isdn/hardware/mISDN/Makefile
-echo "CONFIG_MISDN_LOOP=y" >> drivers/isdn/hardware/mISDN/Makefile
-
-sed -e 's#$(.*)#m#g' drivers/isdn/hardware/mISDN/Makefile.v2.6 >> drivers/isdn/hardware/mISDN/Makefile
 %build_kernel_modules -m l3udss1,mISDN_capi,mISDN_core,mISDN_dtmf,mISDN_x25dte,mISDN_isac,mISDN_l1,mISDN_l2,avmfritz,netjetpci,hfcpci,hfcsusb,hfcsmini,sedlfax,w6692pci,xhfc,mISDN_dsp,mISDN_loop -C drivers/isdn/hardware/mISDN/
 
 %ifnarch hppa mips ppc ppc64 s390 s390x sparc sparc64
 %build_kernel_modules -m hfcmulti -C drivers/isdn/hardware/mISDN/
 %endif
-
 %endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
-# init files
-install -d $RPM_BUILD_ROOT{%{_bindir},/etc/rc.d/init.d}
-install std2kern stddiff $RPM_BUILD_ROOT%{_bindir}
-install misdn-init $RPM_BUILD_ROOT/etc/rc.d/init.d
 
 # devel files
 install -d $RPM_BUILD_ROOT%{_includedir}/linux
@@ -137,28 +108,11 @@ mods=$(echo *-${sep}.ko | sed -e "s#-${sep}.ko##g" -e 's# #,#g')
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post init
-/sbin/chkconfig --add misdn-init
-%service misdn-init restart
-
-%preun init
-if [ "$1" = "0" ]; then
-	%service misdn-init stop
-	/sbin/chkconfig --del misdn-init
-fi
-
 %post	-n kernel%{_alt_kernel}-isdn-mISDN
 %depmod %{_kernel_ver}
 
 %postun	-n kernel%{_alt_kernel}-isdn-mISDN
 %depmod %{_kernel_ver}
-
-%files init
-%defattr(644,root,root,755)
-%doc README.misdn-init
-%attr(754,root,root) /etc/rc.d/init.d/misdn-init
-%attr(755,root,root) %{_bindir}/std2kern
-%attr(755,root,root) %{_bindir}/stddiff
 
 %if %{with kernel}
 %files -n kernel%{_alt_kernel}-isdn-mISDN
@@ -169,6 +123,6 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/linux/isdn_compat.h
-%{_includedir}/linux/mISDNdebugtool.h
+%{_includedir}/linux/mISDNdsp.h
+%{_includedir}/linux/mISDNhw.h
 %{_includedir}/linux/mISDNif.h
