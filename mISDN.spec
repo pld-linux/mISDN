@@ -156,8 +156,9 @@ fi
 %files init
 %defattr(644,root,root,755)
 %doc README.misdn-init
-%attr(754,root,root) /etc/rc.d/init.d/*
-%attr(755,root,root) %{_bindir}/*
+%attr(754,root,root) /etc/rc.d/init.d/misdn-init
+%attr(755,root,root) %{_bindir}/std2kern
+%attr(755,root,root) %{_bindir}/stddiff
 
 %if %{with kernel}
 %files -n kernel%{_alt_kernel}-isdn-mISDN
@@ -168,4 +169,6 @@ fi
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/linux/*.h
+%{_includedir}/linux/isdn_compat.h
+%{_includedir}/linux/mISDNdebugtool.h
+%{_includedir}/linux/mISDNif.h
